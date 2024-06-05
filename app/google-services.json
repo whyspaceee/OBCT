@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "280138413711",
+    "project_id": "obct-bangkit",
+    "storage_bucket": "obct-bangkit.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:280138413711:android:52afc2ddaf921c233ca2fa",
+        "android_client_info": {
+          "package_name": "com.obcteam.obct"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "280138413711-93mbf7s4lshfdkaep1gcuufekt8cpgmj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.obcteam.obct",
+            "certificate_hash": "5f190eb156b243db976990064d442cd2f7b49e1b"
+          }
+        },
+        {
+          "client_id": "280138413711-754tb9aiavchqibpcij9s3vhe6dpdtrh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDns3-OgaLnn0wOoTMZHnFzKKY_XTNGeso"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "280138413711-754tb9aiavchqibpcij9s3vhe6dpdtrh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

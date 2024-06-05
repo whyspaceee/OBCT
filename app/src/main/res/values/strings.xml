@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">OBCT</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="failed_to_sign_in_with_a_google_account">Failed to sign in with a Google Account</string>
+    <string name="google_logo_icon">Google Logo Icon</string>
+    <string name="welcome">Welcome</string>
+    <string name="chose_the_wrong_account">Chose the wrong account?</string>
+    <string name="confirm_date_of_birth">Confirm Date of Birth</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="select_your_date_of_birth">Select your date of birth</string>
+    <string name="cont">Continue</string>
+</resources>

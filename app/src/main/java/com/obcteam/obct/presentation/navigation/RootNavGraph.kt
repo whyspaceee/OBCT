@@ -1,7 +1,9 @@
 package com.obcteam.obct.presentation.navigation
 
 import androidx.compose.material3.Button
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -9,6 +11,7 @@ import androidx.navigation.compose.composable
 import com.google.firebase.auth.FirebaseAuth
 import com.obcteam.obct.presentation.features.auth.onboarding.OnboardingView
 import com.obcteam.obct.presentation.features.auth.onboarding.OnboardingViewModel
+import com.obcteam.obct.presentation.features.input.ChatInputView
 
 object Graph {
     const val ROOT = "root"
@@ -26,7 +29,7 @@ fun RootNavigationGraph(navHostController: NavHostController, startDestination: 
     ) {
         authNavGraph(navHostController)
         composable(route = Graph.ONBOARDING) {
-            val vm = viewModel<OnboardingViewModel>()
+            val vm = hiltViewModel<OnboardingViewModel>()
             OnboardingView(
                 vm = vm,
             )
@@ -34,11 +37,7 @@ fun RootNavigationGraph(navHostController: NavHostController, startDestination: 
         composable(
             route = Graph.MAIN
         ) {
-            Button(onClick = {
-                FirebaseAuth.getInstance().signOut()
-            }) {
-
-            }
+            ChatInputView()
         }
 
     }

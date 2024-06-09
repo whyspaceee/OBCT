@@ -27,11 +27,21 @@ android {
         debug {
             buildConfigField(
                 "String",
+                "BASE_URL",
+                "\"http://34.101.108.25/api/\""
+            )
+            buildConfigField(
+                "String",
                 "WEB_CLIENT_ID",
                 "\"280138413711-754tb9aiavchqibpcij9s3vhe6dpdtrh.apps.googleusercontent.com\""
             )
         }
         release {
+            buildConfigField(
+                "String",
+                "BASE_URL",
+                "\"http://34.101.108.25/api/\""
+            )
             buildConfigField(
                 "String",
                 "WEB_CLIENT_ID",

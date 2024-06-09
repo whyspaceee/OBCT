@@ -10,4 +10,8 @@
     <string name="cancel">Cancel</string>
     <string name="select_your_date_of_birth">Select your date of birth</string>
     <string name="cont">Continue</string>
+    <string name="profile_picture">Profile Picture</string>
+    <string name="can_you_tell_us_which_gender_you_are">Can you tell us what is your gender?</string>
+    <string name="female">Female</string>
+    <string name="male">Male</string>
 </resources>

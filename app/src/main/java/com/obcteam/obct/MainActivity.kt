@@ -30,7 +30,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            OBCTTheme {
+            OBCTTheme(
+                dynamicColor = true,
+            ) {
                 val navHostController = rememberNavController()
                 val mainViewModel = hiltViewModel<MainViewModel>()
                 val startDestination by mainViewModel.startDestination.collectAsState()

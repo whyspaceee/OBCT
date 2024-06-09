@@ -3,12 +3,14 @@ package com.obcteam.obct.presentation.features.auth.login
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
@@ -51,56 +53,61 @@ fun LoginView(modifier: Modifier = Modifier, vm: LoginViewModel) {
     val request: GetCredentialRequest =
         GetCredentialRequest.Builder().addCredentialOption(signInWithGoogleOption).build()
 
-    LoginView(modifier, onClickLoginWithGoogle = {
-        coroutineScope.launch {
-            try {
-                val res = vm.credentialManager.getCredential(
-                    context, request
-                )
-                onAction(LoginAction.LoginWithGoogleCredential(res))
-            } catch (e: Exception) {
-                Toast.makeText(
-                    context,
-                    context.getString(R.string.failed_to_sign_in_with_a_google_account),
-                    Toast.LENGTH_SHORT
-                ).show()
+    LoginView(modifier = modifier,
+        state = state,
+        onClickLoginWithGoogle = {
+            coroutineScope.launch {
+                try {
+                    val res = vm.credentialManager.getCredential(
+                        context, request
+                    )
+                    onAction(LoginAction.LoginWithGoogleCredential(res))
+                } catch (e: Exception) {
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.failed_to_sign_in_with_a_google_account),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
-        }
-    })
+        })
 }
 
 
 @Composable
-fun LoginView(modifier: Modifier = Modifier, onClickLoginWithGoogle: () -> Unit) {
+fun LoginView(
+    modifier: Modifier = Modifier,
+    onClickLoginWithGoogle: () -> Unit,
+    state: LoginState
+) {
     Scaffold(modifier = modifier) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            OutlinedButton(
-                onClick = onClickLoginWithGoogle, colors = ButtonDefaults.outlinedButtonColors(
-                    contentColor = MaterialTheme.colorScheme.onSurface
-                )
+        if (state.isLoading) {
+            Box(modifier = Modifier.fillMaxSize()) {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+            }
+        } else {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Image(
-                    modifier = Modifier.size(24.dp),
-                    painter = painterResource(id = R.drawable.ic_logo_google_g_icon),
-                    contentDescription = stringResource(R.string.google_logo_icon)
-                )
-                Spacer(modifier = Modifier.size(4.dp))
-                Text(stringResource(R.string.sign_in_with_google))
+                OutlinedButton(
+                    onClick = onClickLoginWithGoogle, colors = ButtonDefaults.outlinedButtonColors(
+                        contentColor = MaterialTheme.colorScheme.onSurface
+                    )
+                ) {
+                    Image(
+                        modifier = Modifier.size(24.dp),
+                        painter = painterResource(id = R.drawable.ic_logo_google_g_icon),
+                        contentDescription = stringResource(R.string.google_logo_icon)
+                    )
+                    Spacer(modifier = Modifier.size(4.dp))
+                    Text(stringResource(R.string.sign_in_with_google))
+                }
             }
         }
     }
 }
 
-@Preview
-@Composable
-fun LoginViewPreview() {
-    OBCTTheme {
-        LoginView {}
-    }
-}

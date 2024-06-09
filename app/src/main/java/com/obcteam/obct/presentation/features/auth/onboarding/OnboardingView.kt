@@ -1,44 +1,61 @@
 package com.obcteam.obct.presentation.features.auth.onboarding
 
-import androidx.compose.foundation.gestures.awaitEachGesture
-import androidx.compose.foundation.gestures.awaitFirstDown
-import androidx.compose.foundation.gestures.waitForUpOrCancellation
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.FilledIconToggleButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.PointerEventPass
-import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.obcteam.obct.R
 import com.obcteam.obct.domain.mvi.unpack
+import com.obcteam.obct.presentation.features.auth.onboarding.OnboardingAction
+import com.obcteam.obct.presentation.features.auth.onboarding.screens.WelcomeScreen
+import com.obcteam.obct.presentation.features.auth.onboarding.OnboardingAction as Action
 
 @Composable
 fun OnboardingView(
     modifier: Modifier = Modifier, vm: OnboardingViewModel,
 ) {
-    val (state, onAction) = vm.unpack()
+    val navController = rememberNavController()
+    val (state, onAction, sideEffect) = vm.unpack()
 
-    OnboardingView(state = state, onAction = onAction)
+
+
+    OnboardingView(
+        state = state,
+        onAction = onAction,
+        modifier = modifier,
+        onboardingNavController = navController
+    )
+
+
 }
 
 
@@ -47,96 +64,94 @@ fun OnboardingView(
 fun OnboardingView(
     modifier: Modifier = Modifier,
     state: OnboardingState,
-    onAction: (OnboardingAction) -> Unit
+    onAction: (Action) -> Unit,
+    onboardingNavController: NavHostController
 ) {
-    val onboardingNavController = rememberNavController()
     NavHost(
+        enterTransition = {
+            slideInHorizontally()
+        },
+        modifier = Modifier.background(MaterialTheme.colorScheme.background),
         navController = onboardingNavController, startDestination = OnboardingScreen.Welcome.route
     ) {
-        composable(route = OnboardingScreen.Welcome.route) {
-            val datePickerState = rememberDatePickerState()
-            Scaffold { paddingValues ->
+        composable(
+            route = OnboardingScreen.Welcome.route,
+        ) {
+            WelcomeScreen(
+                state = state, onAction = onAction, navController = onboardingNavController
+            )
+        }
+        composable(
+            route = OnboardingScreen.Gender.route,
+        ) {
+            Scaffold(bottomBar = {
+                BottomAppBar(
+                    contentPadding = PaddingValues(horizontal = 16.dp),
+                    containerColor = Color.Transparent
+                ) {
+                    Button(modifier = Modifier.fillMaxWidth(), onClick = {
+                        onAction(OnboardingAction.SubmitRegister)
+                    }) {
+                        Text(text = stringResource(R.string.cont))
+                    }
+                }
+            }) { paddingValues ->
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(paddingValues)
-                        .padding(40.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
+                        .padding(32.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text = stringResource(R.string.welcome))
-                    OutlinedTextField(
-                        modifier = Modifier.fillMaxWidth(),
-                        value = state.nameField.text,
-                        label = { Text(text = state.nameField.label) },
-                        isError = state.nameField.error != null,
-                        supportingText = { state.nameField.error?.let { Text(text = it) } },
-                        onValueChange = { onAction(OnboardingAction.UpdateNameField(it)) }
+                    Text(
+                        text = stringResource(R.string.can_you_tell_us_which_gender_you_are),
+                        style = MaterialTheme.typography.headlineSmall
                     )
-
-                    OutlinedTextField(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .pointerInput(Unit) {
-                                awaitEachGesture {
-                                    awaitFirstDown(pass = PointerEventPass.Initial)
-                                    val upEvent =
-                                        waitForUpOrCancellation(pass = PointerEventPass.Initial)
-                                    if (upEvent != null) {
-                                        onAction(OnboardingAction.OpenDobPicker)
-                                    }
-                                }
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Row {
+                        FilledIconToggleButton(
+                            modifier = Modifier
+                                .weight(1f)
+                                .height(80.dp),
+                            shape = RoundedCornerShape(25),
+                            onCheckedChange = {
+                                onAction(OnboardingAction.ChangeGender(Gender.Male))
                             },
-                        label = { Text(text = state.dobField.label)},
-                        value = state.dobField.text,
-                        readOnly = true,
-                        onValueChange = {},
-                    )
-
-
-                    if (state.isDobVisible) {
-                        DatePickerDialog(
-                            onDismissRequest = { onAction(OnboardingAction.CloseDobPicker) },
-                            confirmButton = {
-                                TextButton(onClick = {
-                                    if (datePickerState.selectedDateMillis != null) {
-                                        onAction(
-                                            OnboardingAction.UpdateDobField(
-                                                datePickerState.selectedDateMillis!!
-                                            )
-                                        )
-                                        onAction(OnboardingAction.CloseDobPicker)
-                                    }
-                                }) {
-                                    Text(text = stringResource(R.string.ok))
-                                }
+                            checked = state.gender == Gender.Male,
+                        ) {
+                            Column {
+                                Text(text = stringResource(R.string.male))
+                            }
+                        }
+                        Spacer(modifier = Modifier.width(16.dp))
+                        FilledIconToggleButton(
+                            modifier = Modifier
+                                .weight(1f)
+                                .height(80.dp),
+                            shape = RoundedCornerShape(25),
+                            onCheckedChange = {
+                                onAction(OnboardingAction.ChangeGender(Gender.Female))
                             },
-                            dismissButton = {
-                                TextButton(onClick = { onAction(OnboardingAction.CloseDobPicker) }) {
-                                    Text(text = stringResource(R.string.cancel))
-                                }
-                            }) {
-                            DatePicker(
-                                state = datePickerState
-                            )
+                            checked = state.gender == Gender.Female,
+                        ) {
+                            Column {
+                                Text(text = stringResource(R.string.female))
+                            }
+
                         }
                     }
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Button(
-                        modifier = Modifier.fillMaxWidth(),
-                        onClick = { /*TODO*/ }) {
-                        Text(text = stringResource(R.string.cont))
-                    }
-                    TextButton(onClick = { /*TODO*/ }) {
-                        Text(text = stringResource(R.string.chose_the_wrong_account))
-                    }
+
+
                 }
             }
         }
     }
 }
 
+
 sealed class OnboardingScreen(val route: String) {
     data object Welcome : OnboardingScreen("welcome")
+    data object Gender : OnboardingScreen("gender")
     data object Smoking : OnboardingScreen("smoking")
 }

@@ -8,15 +8,23 @@ import okhttp3.Response
 class AuthInterceptor(
     private val authRepository: AuthRepository
 ) : Interceptor {
+    private var token: String? = null
     override fun intercept(chain: Interceptor.Chain): Response {
-        val request = chain.request()
+        val request = chain.request().newBuilder()
+            .addHeader("Authorization", "Bearer $token")
+            .build()
+
         val response = chain.proceed(request)
 
-        if (response.code == 401) {
-            authRepository.logout()
-        }
+//        if (response.code == 401) {
+//            authRepository.logout()
+//        }
 
         return response
+    }
+
+    fun setToken (token: String?) {
+        this.token = token
     }
 
 }

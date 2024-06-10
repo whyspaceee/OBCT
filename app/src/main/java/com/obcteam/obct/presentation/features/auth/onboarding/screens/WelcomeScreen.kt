@@ -71,7 +71,7 @@ fun WelcomeScreen(
         }
     Scaffold(modifier = modifier, bottomBar = {
         BottomAppBar(
-            contentPadding = PaddingValues(horizontal = 16.dp),
+            contentPadding = PaddingValues(horizontal = 32.dp),
             containerColor = Color.Transparent
         ) {
             Button(modifier = Modifier.fillMaxWidth(), onClick = {

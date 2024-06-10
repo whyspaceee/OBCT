@@ -1,5 +1,8 @@
 package com.obcteam.obct.presentation.navigation
 
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -25,7 +28,10 @@ fun RootNavigationGraph(navHostController: NavHostController, startDestination: 
     NavHost(
         navController = navHostController,
         route = Graph.ROOT,
-        startDestination = startDestination
+        startDestination = startDestination,
+        enterTransition =  {
+            fadeIn(animationSpec = tween(2000))
+        }
     ) {
         authNavGraph(navHostController)
         composable(route = Graph.ONBOARDING) {
@@ -37,7 +43,7 @@ fun RootNavigationGraph(navHostController: NavHostController, startDestination: 
         composable(
             route = Graph.MAIN
         ) {
-            ChatInputView()
+            NavigationScaffold()
         }
 
     }

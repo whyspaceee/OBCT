@@ -15,7 +15,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -25,6 +24,30 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+    @Provides
+    @Singleton
+    fun provideAuthInterceptor(): AuthInterceptor {
+        return AuthInterceptor()
+    }
+
+    @Provides
+    @Singleton
+    fun providesOBCTService(authInterceptor: AuthInterceptor): OBCTService {
+        val loggingInterceptor =
+            HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+
+        val client = OkHttpClient.Builder()
+            .addInterceptor(authInterceptor)
+            .addInterceptor(loggingInterceptor)
+            .build()
+
+        return Retrofit.Builder()
+            .baseUrl(BuildConfig.BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
+            .build()
+            .create(OBCTService::class.java)
+    }
 
     @Provides
     @Singleton
@@ -35,9 +58,10 @@ object AppModule {
     @Provides
     @Singleton
     fun provideFirebaseAuthRepository(
-        firebaseAuth: FirebaseAuth
+        firebaseAuth: FirebaseAuth,
+        obctService: OBCTService
     ): AuthRepository {
-        return FirebaseAuthRepository(firebaseAuth)
+        return FirebaseAuthRepository(firebaseAuth, obctService)
     }
 
     @Provides
@@ -46,31 +70,6 @@ object AppModule {
         return CredentialManager.create(context)
     }
 
-    @Provides
-    @Singleton
-    fun provideAuthInterceptor(authRepository: AuthRepository): AuthInterceptor {
-        return AuthInterceptor(authRepository)
-    }
-
-    @Provides
-    @Singleton
-    fun providesOBCTService(authInterceptor: AuthInterceptor): OBCTService {
-        val loggingInterceptor =
-            HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-
-        val client = OkHttpClient.Builder().addInterceptor(authInterceptor)
-            .retryOnConnectionFailure(true)
-            .addInterceptor(loggingInterceptor)
-            .addInterceptor(authInterceptor)
-            .build()
-
-        return Retrofit.Builder()
-            .baseUrl(BuildConfig.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(client)
-            .build()
-            .create(OBCTService::class.java)
-    }
 
     @Provides
     @Singleton

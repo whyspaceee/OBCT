@@ -6,7 +6,6 @@ import okhttp3.Interceptor
 import okhttp3.Response
 
 class AuthInterceptor(
-    private val authRepository: AuthRepository
 ) : Interceptor {
     private var token: String? = null
     override fun intercept(chain: Interceptor.Chain): Response {
@@ -15,10 +14,6 @@ class AuthInterceptor(
             .build()
 
         val response = chain.proceed(request)
-
-//        if (response.code == 401) {
-//            authRepository.logout()
-//        }
 
         return response
     }

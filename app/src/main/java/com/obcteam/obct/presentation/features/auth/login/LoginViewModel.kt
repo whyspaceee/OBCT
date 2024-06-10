@@ -44,9 +44,6 @@ class LoginViewModel @Inject constructor(
                         } catch (e: Exception) {
                             viewModelScope.emitSideEffect(LoginSideEffect.ShowError("Error"))
                             Log.e(TAG, "Error", e)
-                        } finally {
-                            println("isNotLoading")
-
                             updateUiState {
                                 copy(isLoading = false)
                             }

@@ -14,4 +14,7 @@
     <string name="can_you_tell_us_which_gender_you_are">Can you tell us what is your gender?</string>
     <string name="female">Female</string>
     <string name="male">Male</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="height">Height</string>
+    <string name="weight">Weight</string>
 </resources>

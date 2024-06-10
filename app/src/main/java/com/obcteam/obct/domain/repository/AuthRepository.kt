@@ -7,9 +7,14 @@ import kotlinx.coroutines.flow.Flow
 interface AuthRepository {
     fun getUserFlow(): Flow<FirebaseUser?>
 
-    fun getCurrentUser (): FirebaseUser?
+    fun getCurrentFirebaseUser(): FirebaseUser?
     suspend fun loginWithGoogle(idToken: String)
-    suspend fun register(email: String, password: String, name: String)
-    suspend fun getProfile(): User?
     fun logout()
+    suspend fun register(
+        dateOfBirth: String,
+        gender: String,
+    )
+
+    suspend fun getUser(): User?
+
 }

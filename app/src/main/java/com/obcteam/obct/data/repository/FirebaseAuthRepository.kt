@@ -3,6 +3,8 @@ package com.obcteam.obct.data.repository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
+import com.obcteam.obct.data.models.RegisterRequest
+import com.obcteam.obct.data.remote.OBCTService
 import com.obcteam.obct.domain.models.User
 import com.obcteam.obct.domain.repository.AuthRepository
 import kotlinx.coroutines.channels.awaitClose
@@ -12,13 +14,26 @@ import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class FirebaseAuthRepository @Inject constructor(
-    private val firebaseAuth: FirebaseAuth
+    private val firebaseAuth: FirebaseAuth,
+    private val obctService: OBCTService
 ) : AuthRepository {
-
 
 
     override fun logout() {
         firebaseAuth.signOut()
+    }
+
+    override suspend fun register(dateOfBirth: String, gender: String) {
+        obctService.register(
+            RegisterRequest(
+                dateOfBirth = dateOfBirth,
+                gender = gender
+            )
+        )
+    }
+
+    override suspend fun getUser(): User? {
+        return obctService.getProfile()
     }
 
     override fun getUserFlow(): Flow<FirebaseUser?> {
@@ -34,7 +49,7 @@ class FirebaseAuthRepository @Inject constructor(
         }
     }
 
-    override fun getCurrentUser(): FirebaseUser? {
+    override fun getCurrentFirebaseUser(): FirebaseUser? {
         return firebaseAuth.currentUser
     }
 
@@ -43,11 +58,4 @@ class FirebaseAuthRepository @Inject constructor(
         firebaseAuth.signInWithCredential(credential).await()
     }
 
-    override suspend fun register(email: String, password: String, name: String) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getProfile(): User? {
-        return null
-    }
 }

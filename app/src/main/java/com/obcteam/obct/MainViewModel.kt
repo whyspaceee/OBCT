@@ -12,6 +12,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.tasks.await
 import retrofit2.HttpException
 import javax.inject.Inject
 
@@ -25,15 +26,10 @@ class MainViewModel @Inject constructor(authRepository: AuthRepository, authInte
         if (user == null) {
             AuthState.Unauthenticated
         } else {
-            user.getIdToken(true).addOnCompleteListener {
-                if (it.isSuccessful) {
-                    val idToken = it.result.token
-                    authInterceptor.setToken(idToken)
-                    println("idToken : $idToken")
-                }
-            }
             try {
-                val profile = authRepository.getProfile()
+                val tokenResponse = user.getIdToken(true).await()
+                authInterceptor.setToken(tokenResponse.token)
+                val profile = authRepository.getUser()
                 println("profile : $profile")
                 if (profile == null) {
                     AuthState.NotRegistered(user)

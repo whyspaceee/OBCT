@@ -22,7 +22,7 @@ import javax.inject.Inject
 class OnboardingViewModel @Inject constructor(
     private val authRepository: AuthRepository, private val obctRepository: OBCTRepository
 ) : ViewModel(), MVI<OnboardingState, OnboardingAction, OnboardingSideEffect> by mvi(run {
-    val currentUser = authRepository.getCurrentUser()
+    val currentUser = authRepository.getCurrentFirebaseUser()
     OnboardingState(
         imageUri = currentUser?.photoUrl,
         nameField = FormField(
@@ -103,7 +103,7 @@ class OnboardingViewModel @Inject constructor(
 
         viewModelScope.launch {
             try {
-                obctRepository.register(
+                authRepository.register(
                     dateOfBirth = dateIsoString,
                     gender = gender.value
                 )

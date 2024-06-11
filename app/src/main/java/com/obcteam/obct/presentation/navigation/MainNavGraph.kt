@@ -1,7 +1,5 @@
 package com.obcteam.obct.presentation.navigation
 
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,11 +14,9 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -32,7 +28,7 @@ import com.google.firebase.auth.auth
 import com.obcteam.obct.R
 import com.obcteam.obct.domain.forms.FormField
 import com.obcteam.obct.domain.forms.Validator
-import com.obcteam.obct.presentation.features.input.ChatInputView
+import com.obcteam.obct.presentation.features.chat.ChatInputView
 
 @Composable
 fun MainNavGraph(modifier: Modifier = Modifier, navController: NavHostController) {

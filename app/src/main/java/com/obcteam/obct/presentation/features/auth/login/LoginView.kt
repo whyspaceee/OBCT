@@ -28,6 +28,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,23 +44,22 @@ import androidx.compose.ui.unit.sp
 import androidx.credentials.GetCredentialRequest
 import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
 import com.obcteam.obct.R
-import com.obcteam.obct.domain.mvi.CollectSideEffect
-import com.obcteam.obct.domain.mvi.unpack
 import kotlinx.coroutines.launch
 
 @Composable
 fun LoginView(modifier: Modifier = Modifier, vm: LoginViewModel) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
-    val (state, onAction, sideEffect) = vm.unpack()
+    val isLoading = vm.isLoading.collectAsState()
+//    val (state, onAction, sideEffect) = vm.unpack()
 
-    CollectSideEffect(sideEffect = sideEffect, onSideEffect = { effect ->
-        when (effect) {
-            is LoginSideEffect.ShowError -> {
-                Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
-            }
-        }
-    })
+//    CollectSideEffect(sideEffect = sideEffect, onSideEffect = { effect ->
+//        when (effect) {
+//            is LoginSideEffect.ShowError -> {
+//                Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
+//            }
+//        }
+//    })
 
     val signInWithGoogleOption: GetSignInWithGoogleOption =
         GetSignInWithGoogleOption.Builder("280138413711-754tb9aiavchqibpcij9s3vhe6dpdtrh.apps.googleusercontent.com")
@@ -69,14 +69,14 @@ fun LoginView(modifier: Modifier = Modifier, vm: LoginViewModel) {
         GetCredentialRequest.Builder().addCredentialOption(signInWithGoogleOption).build()
 
     LoginView(modifier = modifier,
-        state = state,
+        isLoading = isLoading.value,
         onClickLoginWithGoogle = {
             coroutineScope.launch {
                 try {
                     val res = vm.credentialManager.getCredential(
                         context, request
                     )
-                    onAction(LoginAction.LoginWithGoogleCredential(res))
+                    vm.loginWithGoogleCredential(res)
                 } catch (e: Exception) {
                     Toast.makeText(
                         context,
@@ -92,11 +92,11 @@ fun LoginView(modifier: Modifier = Modifier, vm: LoginViewModel) {
 fun LoginView(
     modifier: Modifier = Modifier,
     onClickLoginWithGoogle: () -> Unit,
-    state: LoginState
+    isLoading: Boolean
 ) {
     Scaffold(modifier = modifier) { paddingValues ->
         AnimatedContent(
-            targetState = state.isLoading,
+            targetState = isLoading,
             label = "login",
             transitionSpec = {
                 ContentTransform(

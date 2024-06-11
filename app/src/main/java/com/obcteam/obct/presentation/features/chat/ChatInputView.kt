@@ -1,9 +1,7 @@
-package com.obcteam.obct.presentation.features.input
+package com.obcteam.obct.presentation.features.chat
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.FiniteAnimationSpec
 import androidx.compose.animation.core.MutableTransitionState
-import androidx.compose.animation.core.SpringSpec
 import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.background
@@ -21,7 +19,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.Delay
 
 @Composable
 fun ChatInputView(modifier: Modifier = Modifier, isFirstTime: Boolean) {

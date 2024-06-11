@@ -13,7 +13,7 @@ import androidx.navigation.compose.rememberNavController
 import com.obcteam.obct.domain.mvi.unpack
 import com.obcteam.obct.presentation.features.auth.onboarding.screens.GenderScreen
 import com.obcteam.obct.presentation.features.auth.onboarding.screens.WelcomeScreen
-import com.obcteam.obct.presentation.features.input.ChatInputView
+import com.obcteam.obct.presentation.features.chat.ChatInputView
 import com.obcteam.obct.presentation.features.auth.onboarding.OnboardingAction as Action
 
 @Composable

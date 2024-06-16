@@ -94,7 +94,7 @@ fun LoginView(
     onClickLoginWithGoogle: () -> Unit,
     isLoading: Boolean
 ) {
-    Scaffold(modifier = modifier) { paddingValues ->
+    Scaffold(modifier = modifier, ) { paddingValues ->
         AnimatedContent(
             targetState = isLoading,
             label = "login",

@@ -91,6 +91,7 @@ dependencies {
     implementation(libs.okhttp.logging.interceptor)
     implementation(libs.dagger.hilt)
     implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.graphics.shapes.android)
     kapt(libs.dagger.hilt.android.compiler)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)

@@ -1,4 +1,4 @@
-package com.obcteam.obct.presentation.features.auth.onboarding.screens
+package com.obcteam.obct.presentation.features.auth.register.screens
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -48,17 +48,17 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.google.firebase.auth.FirebaseAuth
 import com.obcteam.obct.R
-import com.obcteam.obct.presentation.features.auth.onboarding.OnboardingAction
-import com.obcteam.obct.presentation.features.auth.onboarding.OnboardingScreen
-import com.obcteam.obct.presentation.features.auth.onboarding.OnboardingState
+import com.obcteam.obct.presentation.features.auth.register.OnboardingScreen
+import com.obcteam.obct.presentation.features.auth.register.RegisterAction
+import com.obcteam.obct.presentation.features.auth.register.RegisterState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WelcomeScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    state: OnboardingState,
-    onAction: (OnboardingAction) -> Unit
+    state: RegisterState,
+    onAction: (RegisterAction) -> Unit
 ) {
     val datePickerState = rememberDatePickerState()
     val result =
@@ -66,7 +66,7 @@ fun WelcomeScreen(
             contract = ActivityResultContracts.PickVisualMedia()
         ) {
             it?.let {
-                onAction(OnboardingAction.UpdateImageUri(it))
+                onAction(RegisterAction.UpdateImageUri(it))
             }
         }
     Scaffold(modifier = modifier, bottomBar = {
@@ -126,7 +126,7 @@ fun WelcomeScreen(
                 isError = state.nameField.error != null,
                 maxLines = 1,
                 supportingText = { state.nameField.error?.let { Text(text = it) } },
-                onValueChange = { onAction(OnboardingAction.UpdateNameField(it)) })
+                onValueChange = { onAction(RegisterAction.UpdateNameField(it)) })
 
             OutlinedTextField(
                 modifier = Modifier
@@ -136,7 +136,7 @@ fun WelcomeScreen(
                             awaitFirstDown(pass = PointerEventPass.Initial)
                             val upEvent = waitForUpOrCancellation(pass = PointerEventPass.Initial)
                             if (upEvent != null) {
-                                onAction(OnboardingAction.OpenDobPicker)
+                                onAction(RegisterAction.OpenDobPicker)
                             }
                         }
                     },
@@ -151,23 +151,23 @@ fun WelcomeScreen(
 
 
             if (state.isDobVisible) {
-                DatePickerDialog(onDismissRequest = { onAction(OnboardingAction.CloseDobPicker) },
+                DatePickerDialog(onDismissRequest = { onAction(RegisterAction.CloseDobPicker) },
                     confirmButton = {
                         TextButton(onClick = {
                             if (datePickerState.selectedDateMillis != null) {
                                 onAction(
-                                    OnboardingAction.UpdateDobField(
+                                    RegisterAction.UpdateDobField(
                                         datePickerState.selectedDateMillis!!
                                     )
                                 )
-                                onAction(OnboardingAction.CloseDobPicker)
+                                onAction(RegisterAction.CloseDobPicker)
                             }
                         }) {
                             Text(text = stringResource(R.string.ok))
                         }
                     },
                     dismissButton = {
-                        TextButton(onClick = { onAction(OnboardingAction.CloseDobPicker) }) {
+                        TextButton(onClick = { onAction(RegisterAction.CloseDobPicker) }) {
                             Text(text = stringResource(R.string.cancel))
                         }
                     }) {

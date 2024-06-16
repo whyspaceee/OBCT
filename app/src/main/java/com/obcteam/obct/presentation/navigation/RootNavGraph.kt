@@ -8,13 +8,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.obcteam.obct.presentation.features.auth.onboarding.OnboardingView
-import com.obcteam.obct.presentation.features.auth.onboarding.OnboardingViewModel
+import com.obcteam.obct.presentation.features.auth.register.RegisterView
+import com.obcteam.obct.presentation.features.auth.register.RegisterViewModel
 
 object Graph {
     const val ROOT = "root"
     const val MAIN = "main"
     const val AUTH = "auth"
-    const val ONBOARDING = "onboarding"
+    const val REGISTER = "register"
+    const val ONBOARD = "onboard"
 }
 
 @Composable
@@ -28,12 +30,17 @@ fun RootNavigationGraph(navHostController: NavHostController, startDestination: 
         }
     ) {
         authNavGraph(navHostController)
-        composable(route = Graph.ONBOARDING) {
-            val vm = hiltViewModel<OnboardingViewModel>()
-            OnboardingView(
+        composable(route = Graph.REGISTER) {
+            val vm = hiltViewModel<RegisterViewModel>()
+            RegisterView(
                 vm = vm,
             )
         }
+        composable(route = Graph.ONBOARD) {
+            val vm = hiltViewModel<RegisterViewModel>()
+            OnboardingView()
+        }
+
         composable(
             route = Graph.MAIN
         ) {

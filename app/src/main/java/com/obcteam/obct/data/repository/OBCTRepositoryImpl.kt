@@ -8,5 +8,8 @@ import com.obcteam.obct.domain.repository.OBCTRepository
 class OBCTRepositoryImpl(
     private val obctService: OBCTService
 ) : OBCTRepository {
+    override suspend fun lastPrediction(): String? {
+        return null
+    }
 
 }

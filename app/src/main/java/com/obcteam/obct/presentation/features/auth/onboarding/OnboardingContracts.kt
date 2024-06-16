@@ -1,36 +1,43 @@
 package com.obcteam.obct.presentation.features.auth.onboarding
 
-import android.net.Uri
-import com.obcteam.obct.domain.forms.FormField
-
 data class OnboardingState(
-    val imageUri: Uri? = null,
-    val nameField: FormField,
-    val dobField: FormField,
-    val dobMilis: Long? = null,
-    val isDobVisible: Boolean = false,
-    val gender : Gender? = null
+    val height: Int? = null,
+    val weight: Int? = null,
+    val familyHistory: Boolean? = null,
+    val eatingHabits: Boolean? = null,
+    val vegetables: Vegetables? = null,
+    val smoking: Boolean? = null,
+    val monitorCalorieIntake: Boolean? = null,
+    val mainMeal: MainMeal? = null,
+    val foodBetweenMeals: FoodBetweenMeals? = null
 )
 
-sealed class Gender(val value : String) {
-    data object Female : Gender("female")
-    data object Male : Gender("male")
+sealed class FoodBetweenMeals(val value: Int) {
+    object No : FoodBetweenMeals(0)
+    object Sometimes : FoodBetweenMeals(1)
+    object Often : FoodBetweenMeals(2)
+    object Always : FoodBetweenMeals(3)
 }
 
-sealed interface OnboardingAction {
-    data class UpdateNameField(val name: String) : OnboardingAction
-    data object OpenDobPicker : OnboardingAction
-    data object CloseDobPicker : OnboardingAction
-    data class UpdateDobField(val dob: Long) : OnboardingAction
-    data class ChangeGender(val gender: Gender) : OnboardingAction
-
-    data class UpdateImageUri(val uri: Uri) : OnboardingAction
-    data object ValidateWelcomeScreen : OnboardingAction
-
-    data object SubmitRegister : OnboardingAction
+sealed class MainMeal(val value: Int) {
+    object Three : MainMeal(2)
+    object OneOrTwo : MainMeal(1)
+    object MoreThanThree : MainMeal(3)
 }
 
-sealed interface OnboardingSideEffect {
-    data class NavigateTo(val screen: OnboardingScreen) : OnboardingSideEffect
-
+sealed class Vegetables(val value: Int) {
+    object Yes : Vegetables(3)
+    object No : Vegetables(1)
+    object Maybe : Vegetables(2)
 }
+
+interface OnboardingAction {
+    data class SetHeight(val height: Int) : OnboardingAction
+    data class SetWeight(val weight: Int) : OnboardingAction
+    object Submit : OnboardingAction
+}
+
+interface OnboardingSideEffect
+
+
+

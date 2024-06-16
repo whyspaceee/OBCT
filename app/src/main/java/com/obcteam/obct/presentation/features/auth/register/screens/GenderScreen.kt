@@ -1,4 +1,4 @@
-package com.obcteam.obct.presentation.features.auth.onboarding.screens
+package com.obcteam.obct.presentation.features.auth.register.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,12 +24,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.obcteam.obct.R
-import com.obcteam.obct.presentation.features.auth.onboarding.Gender
-import com.obcteam.obct.presentation.features.auth.onboarding.OnboardingAction
-import com.obcteam.obct.presentation.features.auth.onboarding.OnboardingState
+import com.obcteam.obct.presentation.features.auth.register.Gender
+import com.obcteam.obct.presentation.features.auth.register.RegisterAction
+import com.obcteam.obct.presentation.features.auth.register.RegisterState
 
 @Composable
-fun GenderScreen(modifier: Modifier = Modifier, state: OnboardingState, onAction: (OnboardingAction) -> Unit) {
+fun GenderScreen(modifier: Modifier = Modifier, state: RegisterState, onAction: (RegisterAction) -> Unit) {
     Scaffold(
         modifier = modifier,
         bottomBar = {
@@ -38,7 +38,7 @@ fun GenderScreen(modifier: Modifier = Modifier, state: OnboardingState, onAction
                 containerColor = Color.Transparent
             ) {
                 Button(modifier = Modifier.fillMaxWidth(), onClick = {
-                    onAction(OnboardingAction.SubmitRegister)
+                    onAction(RegisterAction.SubmitRegister)
                 }) {
                     Text(text = stringResource(R.string.cont))
                 }
@@ -64,7 +64,7 @@ fun GenderScreen(modifier: Modifier = Modifier, state: OnboardingState, onAction
                         .height(80.dp),
                     shape = RoundedCornerShape(25),
                     onCheckedChange = {
-                        onAction(OnboardingAction.ChangeGender(Gender.Male))
+                        onAction(RegisterAction.ChangeGender(Gender.Male))
                     },
                     checked = state.gender == Gender.Male,
                 ) {
@@ -79,7 +79,7 @@ fun GenderScreen(modifier: Modifier = Modifier, state: OnboardingState, onAction
                         .height(80.dp),
                     shape = RoundedCornerShape(25),
                     onCheckedChange = {
-                        onAction(OnboardingAction.ChangeGender(Gender.Female))
+                        onAction(RegisterAction.ChangeGender(Gender.Female))
                     },
                     checked = state.gender == Gender.Female,
                 ) {

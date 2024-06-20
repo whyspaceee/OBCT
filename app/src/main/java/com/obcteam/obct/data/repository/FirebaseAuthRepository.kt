@@ -3,7 +3,7 @@ package com.obcteam.obct.data.repository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
-import com.obcteam.obct.data.models.RegisterRequest
+import com.obcteam.obct.data.remote.models.RegisterRequest
 import com.obcteam.obct.data.remote.OBCTService
 import com.obcteam.obct.domain.models.User
 import com.obcteam.obct.domain.repository.AuthRepository
@@ -30,6 +30,11 @@ class FirebaseAuthRepository @Inject constructor(
                 gender = gender
             )
         )
+    }
+
+    override fun refreshToken() {
+        val currentUser = firebaseAuth.currentUser ?: return
+        firebaseAuth.updateCurrentUser(currentUser)
     }
 
     override suspend fun getUser(): User? {

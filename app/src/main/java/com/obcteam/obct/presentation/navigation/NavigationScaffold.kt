@@ -6,15 +6,13 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -29,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 
@@ -41,16 +40,10 @@ data class NavigationItem(
     companion object {
         val items = listOf(
             NavigationItem(
-                title = "Home",
-                route = MainScreen.Home,
-                selectedIcon = Icons.Filled.Home,
-                unselectedIcon = Icons.Outlined.Home
-            ),
-            NavigationItem(
-                title = "Add Story",
-                route = MainScreen.AddData,
-                selectedIcon = Icons.Filled.Add,
-                unselectedIcon = Icons.Outlined.Add
+                title = "History",
+                route = MainScreen.History,
+                selectedIcon = Icons.Filled.DateRange,
+                unselectedIcon = Icons.Outlined.DateRange
             ),
             NavigationItem(
                 title = "Chat",
@@ -65,13 +58,14 @@ data class NavigationItem(
                 unselectedIcon = Icons.Outlined.Settings
             ),
 
-        )
+            )
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NavigationScaffold(
+    rootNavController: NavHostController
 ) {
     val navController = rememberNavController()
     val currentBackStack = navController.currentBackStackEntryAsState()
@@ -79,7 +73,7 @@ fun NavigationScaffold(
         .value
         ?.destination
         ?.route
-        ?: MainScreen.Home.route
+        ?: MainScreen.Chat.route
 
     val configuration = LocalConfiguration.current
     Scaffold(
@@ -124,7 +118,9 @@ fun NavigationScaffold(
                 )
             }
             MainNavGraph(
-                modifier = Modifier.padding(it), navController = navController
+                modifier = Modifier.padding(it),
+                navController = navController,
+                rootNavController = rootNavController
             )
         }
     }

@@ -1,7 +1,6 @@
 package com.obcteam.obct.presentation.features.auth.login
 
 import androidx.credentials.GetCredentialResponse
-import com.obcteam.obct.domain.forms.FormField
 
 data class LoginState(
     val isLoading: Boolean = false

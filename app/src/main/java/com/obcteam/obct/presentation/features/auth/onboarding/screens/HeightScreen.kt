@@ -79,7 +79,7 @@ fun HeightScreen(
                         minValue = 0,
                         maxValue = 250,
                         lineStroke = 12f,
-                        initialValue = 65,
+                        initialValue = 165,
                         tenTypeLineHeight = 48,
                         fiveTypeLineHeight = 32,
                         numberPadding = 48,

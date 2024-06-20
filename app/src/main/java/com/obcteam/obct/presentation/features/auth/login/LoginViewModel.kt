@@ -4,13 +4,10 @@ import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialResponse
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.obcteam.obct.data.repository.FirebaseAuthRepository
-import com.obcteam.obct.domain.mvi.MVI
-import com.obcteam.obct.domain.mvi.mvi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

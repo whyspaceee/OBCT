@@ -15,6 +15,8 @@ interface AuthRepository {
         gender: String,
     )
 
+    fun refreshToken()
+
     suspend fun getUser(): User?
 
 }

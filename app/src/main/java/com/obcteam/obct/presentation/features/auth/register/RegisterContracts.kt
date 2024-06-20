@@ -9,7 +9,8 @@ data class RegisterState(
     val dobField: FormField,
     val dobMilis: Long? = null,
     val isDobVisible: Boolean = false,
-    val gender : Gender? = null
+    val gender : Gender? = null,
+    val isSubmitting : Boolean = false
 )
 
 sealed class Gender(val value : String) {
@@ -31,6 +32,7 @@ sealed interface RegisterAction {
 }
 
 sealed interface RegisterSideEffect {
-    data class NavigateTo(val screen: OnboardingScreen) : RegisterSideEffect
+
+    object refreshAuth : RegisterSideEffect
 
 }

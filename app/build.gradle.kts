@@ -97,10 +97,25 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.gms.play.services.auth)
 
-    implementation("androidx.credentials:credentials:1.2.2")
-    implementation( "androidx.credentials:credentials-play-services-auth:1.2.2")
-    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.0")
-    implementation("io.coil-kt:coil-compose:2.6.0")
+    implementation(libs.androidx.credentials)
+    implementation( libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
+    implementation(libs.coil.compose)
+
+    implementation(libs.androidx.room.runtime)
+    annotationProcessor(libs.androidx.room.compiler)
+    kapt(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
+    val room_version = "2.6.1"
+
+    implementation("androidx.room:room-paging:$room_version")
+    implementation("androidx.paging:paging-compose:1.0.0-alpha19")
+    implementation("com.arnyminerz.markdowntext:markdowntext:1.3.1")
+    implementation("com.google.ai.client.generativeai:generativeai:0.8.0")
+
+    implementation(libs.vico.compose)
+    implementation(libs.vico.compose.m3)
+    implementation(libs.vico.core)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

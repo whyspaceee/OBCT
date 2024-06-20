@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
 import com.obcteam.obct.data.remote.AuthInterceptor
+import com.obcteam.obct.data.remote.models.PredictionResponse
 import com.obcteam.obct.domain.models.User
 import com.obcteam.obct.domain.repository.AuthRepository
 import com.obcteam.obct.domain.repository.OBCTRepository
@@ -20,7 +21,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    authRepository: AuthRepository,
+    val authRepository: AuthRepository,
     authInterceptor: AuthInterceptor,
     obctRepository: OBCTRepository
 ) :
@@ -35,7 +36,6 @@ class MainViewModel @Inject constructor(
                 val tokenResponse = user.getIdToken(true).await()
                 authInterceptor.setToken(tokenResponse.token)
                 val profile = authRepository.getUser()
-                println("profile : $profile")
                 if (profile == null) {
                     AuthState.NotRegistered(user)
                 } else {
@@ -43,7 +43,7 @@ class MainViewModel @Inject constructor(
                     if (lastPrediction == null) {
                         AuthState.FirstTime(profile)
                     } else {
-                        AuthState.Authenticated(profile)
+                        AuthState.Authenticated(profile, lastPrediction)
                     }
                 }
             } catch (e: HttpException) {
@@ -62,6 +62,10 @@ class MainViewModel @Inject constructor(
         }
     }.stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
+    fun refresh() {
+        authRepository.refreshToken()
+    }
+
 }
 
 
@@ -69,7 +73,7 @@ sealed class AuthState {
     data object Unauthenticated : AuthState()
     data object Loading : AuthState()
     data class FirstTime(val user: User) : AuthState()
-    data class Authenticated(val user: User) : AuthState()
+    data class Authenticated(val user: User, val lastPrediction: PredictionResponse) : AuthState()
     data class NotRegistered(val firebaseUser: FirebaseUser) : AuthState()
 
 }

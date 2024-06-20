@@ -1,7 +1,5 @@
 package com.obcteam.obct.data.remote
 
-import com.google.firebase.auth.FirebaseAuth
-import com.obcteam.obct.domain.repository.AuthRepository
 import okhttp3.Interceptor
 import okhttp3.Response
 

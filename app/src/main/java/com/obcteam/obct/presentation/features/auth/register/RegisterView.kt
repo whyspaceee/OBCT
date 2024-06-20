@@ -6,14 +6,17 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.obcteam.obct.MainViewModel
+import com.obcteam.obct.domain.mvi.CollectSideEffect
 import com.obcteam.obct.domain.mvi.unpack
 import com.obcteam.obct.presentation.features.auth.register.screens.GenderScreen
 import com.obcteam.obct.presentation.features.auth.register.screens.WelcomeScreen
-import com.obcteam.obct.presentation.features.chat.ChatInputView
 import com.obcteam.obct.presentation.features.auth.register.RegisterAction as Action
 
 @Composable
@@ -22,6 +25,15 @@ fun RegisterView(
 ) {
     val navController = rememberNavController()
     val (state, onAction, sideEffect) = vm.unpack()
+    val mainViewModel = hiltViewModel<MainViewModel>(
+        LocalContext.current as androidx.activity.ComponentActivity
+    )
+
+    CollectSideEffect(sideEffect = sideEffect) {
+        when (it) {
+            RegisterSideEffect.refreshAuth -> mainViewModel.refresh()
+        }
+    }
 
     RegisterView(
         state = state,
@@ -60,9 +72,9 @@ fun RegisterView(
         ) {
             GenderScreen(state = state, onAction = onAction)
         }
-        composable(route = OnboardingScreen.FirstTimeChat.route) {
-            ChatInputView(isFirstTime = true)
-        }
+//        composable(route = OnboardingScreen.FirstTimeChat.route) {
+//            ChatInputView()
+//        }
         composable(route = OnboardingScreen.FirstTimeInput.route) {
         }
     }

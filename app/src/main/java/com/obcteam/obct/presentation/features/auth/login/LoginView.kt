@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
@@ -94,7 +95,7 @@ fun LoginView(
     onClickLoginWithGoogle: () -> Unit,
     isLoading: Boolean
 ) {
-    Scaffold(modifier = modifier, ) { paddingValues ->
+    Scaffold(modifier = modifier) { paddingValues ->
         AnimatedContent(
             targetState = isLoading,
             label = "login",
@@ -120,6 +121,14 @@ fun LoginView(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.obct),
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(96.dp).align(Alignment.Start)
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+
                     Box(modifier = Modifier.fillMaxWidth()) {
                         Text(
                             modifier = Modifier.width(250.dp),
@@ -134,12 +143,10 @@ fun LoginView(
                                 )
                             ),
                         )
-
-
                     }
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(text = "Start measuring your weight and let our AI model do the rest")
-                    Spacer(modifier = Modifier.height(32.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
                     OutlinedButton(
                         modifier = Modifier.fillMaxWidth(),
                         onClick = onClickLoginWithGoogle,

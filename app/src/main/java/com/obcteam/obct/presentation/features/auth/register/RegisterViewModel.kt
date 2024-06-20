@@ -74,6 +74,9 @@ class RegisterViewModel @Inject constructor(
     }
 
     private fun submitRegister() {
+        updateUiState {
+            copy(isSubmitting = true)
+        }
         val name = uiState.value.nameField.validate()
         val dob = uiState.value.dobMilis
         val gender = uiState.value.gender
@@ -89,22 +92,26 @@ class RegisterViewModel @Inject constructor(
         }
 
         if (gender == null) {
-            println(" gender is invalid")
             return
         }
 
         val dateIsoString = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(dob)
 
-        println("DateIsoString $dateIsoString")
 
         viewModelScope.launch {
+
             try {
                 authRepository.register(
                     dateOfBirth = dateIsoString,
                     gender = gender.value
                 )
+                viewModelScope.emitSideEffect(RegisterSideEffect.refreshAuth)
+
             } catch (e: Exception) {
                 println(e.message)
+                updateUiState {
+                    copy(isSubmitting = false)
+                }
             }
         }
 

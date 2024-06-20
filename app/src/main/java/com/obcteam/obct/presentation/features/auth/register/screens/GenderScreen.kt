@@ -29,7 +29,11 @@ import com.obcteam.obct.presentation.features.auth.register.RegisterAction
 import com.obcteam.obct.presentation.features.auth.register.RegisterState
 
 @Composable
-fun GenderScreen(modifier: Modifier = Modifier, state: RegisterState, onAction: (RegisterAction) -> Unit) {
+fun GenderScreen(
+    modifier: Modifier = Modifier,
+    state: RegisterState,
+    onAction: (RegisterAction) -> Unit
+) {
     Scaffold(
         modifier = modifier,
         bottomBar = {
@@ -37,9 +41,12 @@ fun GenderScreen(modifier: Modifier = Modifier, state: RegisterState, onAction: 
                 contentPadding = PaddingValues(horizontal = 32.dp),
                 containerColor = Color.Transparent
             ) {
-                Button(modifier = Modifier.fillMaxWidth(), onClick = {
-                    onAction(RegisterAction.SubmitRegister)
-                }) {
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    enabled = !state.isSubmitting,
+                    onClick = {
+                        onAction(RegisterAction.SubmitRegister)
+                    }) {
                     Text(text = stringResource(R.string.cont))
                 }
             }
